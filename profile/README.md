@@ -39,16 +39,27 @@
 
 ---
 
-## QA 系统(2026-04-24 上线 · 2026-04-29 闭环升级)
+## QA 系统(2026-04-24 上线 · 2026-04-29 闭环升级 · 2026-04-29 晚 双红线纠正)
 
-共享引擎 + per-app 契约驱动 · **8 audit + multi-persona LLM judge + ai-output-quality + reviewer + auto-fixer + health-check** 全自动闭环:
+共享引擎 + per-app 契约驱动 · **8 audit + multi-persona LLM judge(per_route preflight + persona.setup_query)+ ai-output-quality + reviewer + auto-fixer + health-check 6 项 + verify-deploy** 全自动闭环。
 
-- **commercialize 三 hard gate**:Step E.5 RLS 必启 · F.5 contract reviewer 必过 · F.7 LLM judge 必 0 P0 · F.8 health-check 必 4/4 PASS
+- **commercialize 四 hard gate**:Step E.5 RLS 必启 · F.5 contract reviewer 必过 · F.7 LLM judge 必 0 P0 · F.8 health-check 必 6/6 PASS
+- **health-check 6 项**:railway-deploy(deployment list 必 SUCCESS) · supabase-rls(public schema 必全启) · liveness · critical-routes · build-artifact · db-connectivity
+- **verify-deploy 工程保险**:`atelier/agents/qa-real-device/verify-deploy.mjs` · push 后必跑 · railway deployment list 最新条 SUCCESS + curl base_url 200/302 · 否则 exit 2 — 防"git push ≠ deploy success"红线
 - **Auto-fixer 退出条件**:同 finding 修过 ≥ 3 次 → 升级到产品层(`escalate-to-product.md` + 自动微信推 Eric)· 计数源 Notion findings DB hash · git log fallback
 - **--until-clean**:auto-fix.mjs 真多轮 audit→fix→re-audit 循环 · 5 轮硬上限防 LLM 抽风
 - **6h cron**:macbook launchd(com.501e.atelier.qa-llm-judge)· lingxi + fit-pocket 持续监控
-- **post-commit health hook**:每个 commercial app 装 git hook · 改源码后台跑 4 项 health(liveness / journey routes / build artifact / DB connectivity)· 不阻塞 commit
-- **LLM stochastic 边界**:`acceptable_p1_after_fixes` 字段仅适用 LLM 自由文本生成(塔罗解读 / insights)· 不适用 audit 抓的产品体验 bug(必须修源码)
+- **post-commit health hook**:每个 commercial app 装 git hook · 改源码后台跑 6 项 health · 不阻塞 commit
+- **LLM stochastic 边界(scope 严格)**:`acceptable_p1_after_fixes` 字段**仅适用** LLM 自由文本生成(塔罗解读 / insights / 长文 over-promise·persona-drift·boilerplate)· **不适用** audit 抓的产品体验 bug(a11y / 量表反向 / badge 缺失等必须修源码)
+
+### 4-29 晚 多轮 LLM judge 修复实战(P1 收敛曲线)
+
+| | Round 1 | Round 2 | Round 4(round 3 修后) |
+|---|---|---|---|
+| **lingxi** | P1=6 | P1=4 | P1=2 |
+| **fit-pocket** | P1=9 | P1=5 | P1=5(R3 引入 4 项 /library regression · R5 修) |
+
+修了 ~40 项产品体验 bug:塔罗抽卡 UI 放大 · /onboarding standalone confirmation page · /tarot 三态拆分 · /history loading vs empty · RPE 量表 1-5 反 → 1-10 行业标准 · fit-pocket Goal 枚举扩 recomp/cardio · e2e-onboard ?profile= 6 persona · elder DONE 触控区 → 48px · L1·ROOKIE badge propagation 等。
 
 详见 [`atelier/agents/qa-real-device/README.md`](https://github.com/501EUniversity/atelier/tree/main/agents/qa-real-device#readme) · 新 app 8 步上线 · [`atelier/README.md`](https://github.com/501EUniversity/atelier#readme)。
 
