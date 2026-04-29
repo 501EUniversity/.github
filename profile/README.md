@@ -52,14 +52,21 @@
 - **post-commit health hook**:每个 commercial app 装 git hook · 改源码后台跑 6 项 health · 不阻塞 commit
 - **LLM stochastic 边界(scope 严格)**:`acceptable_p1_after_fixes` 字段**仅适用** LLM 自由文本生成(塔罗解读 / insights / 长文 over-promise·persona-drift·boilerplate)· **不适用** audit 抓的产品体验 bug(a11y / 量表反向 / badge 缺失等必须修源码)
 
-### 4-29 晚 多轮 LLM judge 修复实战(P1 收敛曲线)
+### 4-29 晚 6 轮 LLM judge 修复实战(P1 收敛 · 真闭环)
 
-| | Round 1 | Round 2 | Round 4(round 3 修后) |
-|---|---|---|---|
-| **lingxi** | P1=6 | P1=4 | P1=2 |
-| **fit-pocket** | P1=9 | P1=5 | P1=5(R3 引入 4 项 /library regression · R5 修) |
+| | R1 | R2 | R3 | R5 | **TRUE FINAL** |
+|---|---|---|---|---|---|
+| **lingxi**(4 personas) | 6 | 4 | 2 | **0** ✅ | 0 ✅ 全 4 personas P1=0 |
+| **fit-pocket**(6 personas) | 9 | 5 | 5 | 5 | **4**(5/6 personas P1=0 · 1 elder a11y escalate) |
 
-修了 ~40 项产品体验 bug:塔罗抽卡 UI 放大 · /onboarding standalone confirmation page · /tarot 三态拆分 · /history loading vs empty · RPE 量表 1-5 反 → 1-10 行业标准 · fit-pocket Goal 枚举扩 recomp/cardio · e2e-onboard ?profile= 6 persona · elder DONE 触控区 → 48px · L1·ROOKIE badge propagation 等。
+总修了 **~50 项产品体验 bug**:塔罗抽卡 UI 放大 + 翻牌动画放慢 · /onboarding standalone confirmation · ProfileGate 三态 · RPE 1-5 反 → 1-10 行业标准 · fit-pocket Goal 枚举扩 recomp/cardio · e2e-onboard ?profile= 6 persona profile 注入 · /library badge × 肌群 layout 重设计 · abs goal 强制 2 核心专项注入(33%) · planGenerator push/pull 边界修 · 加传统杠铃硬拉 · elder 字号 4 轮迭代等。
+
+**LLM stochastic 边界**:fit-pocket 剩 4 P1 全是 elder-low-vision 字号 a11y 同 category(修过 4 次仍抓 caps 印章 vs 字号 trade-off)· 按 escalate 纪律升级到产品层 · 4 选项(iOS Dynamic Type 治本 / elder mode toggle / 整体 caps 一刀切 / 短期 acceptable_noise)等 Eric 拍板。
+
+### 双红线纠正(2026-04-29 晚 永久内化)
+
+1. **`acceptable_p1_after_fixes` scope 严格** · 仅适用 LLM 自由文本生成 stochastic(塔罗解读 / insights)· **不适用** audit 抓的产品体验 bug(必须修源码) · `feedback_llm_stochastic_dont_overreach.md` 二次澄清
+2. **git push ≠ Railway deploy success**(railway up 本地传模式)· `feedback_railway_up_not_git_autopull.md` 立 · 工程保险 `verify-deploy.mjs`(railway deployment list 必 SUCCESS) + `health-check.mjs` 加 `railway-deploy` + `supabase-rls` 双闸
 
 详见 [`atelier/agents/qa-real-device/README.md`](https://github.com/501EUniversity/atelier/tree/main/agents/qa-real-device#readme) · 新 app 8 步上线 · [`atelier/README.md`](https://github.com/501EUniversity/atelier#readme)。
 
