@@ -39,13 +39,19 @@
 
 ---
 
-## QA 系统(2026-04-24 上线)
+## QA 系统(2026-04-24 上线 · 2026-04-29 闭环升级)
 
-共享引擎 + per-app 契约驱动。每次 push 自动跑 L1/L2/L4 · L4 挂了微信推 · L1 视觉回归 · **契约驱动 7 audit** 跑 ai-tone / PWA / a11y / perf / safe-area / console / clamp:
+共享引擎 + per-app 契约驱动 · **8 audit + multi-persona LLM judge + ai-output-quality + reviewer + auto-fixer + health-check** 全自动闭环:
 
-- 详见 [`atelier/agents/qa-real-device/README.md`](https://github.com/501EUniversity/atelier/tree/main/agents/qa-real-device#readme)
-- 新 app 接入 5 步 · [`atelier/README.md`](https://github.com/501EUniversity/atelier#github-actions--multi-app-qa-%E6%9E%B6%E6%9E%84)
+- **commercialize 三 hard gate**:Step E.5 RLS 必启 · F.5 contract reviewer 必过 · F.7 LLM judge 必 0 P0 · F.8 health-check 必 4/4 PASS
+- **Auto-fixer 退出条件**:同 finding 修过 ≥ 3 次 → 升级到产品层(`escalate-to-product.md` + 自动微信推 Eric)· 计数源 Notion findings DB hash · git log fallback
+- **--until-clean**:auto-fix.mjs 真多轮 audit→fix→re-audit 循环 · 5 轮硬上限防 LLM 抽风
+- **6h cron**:macbook launchd(com.501e.atelier.qa-llm-judge)· lingxi + fit-pocket 持续监控
+- **post-commit health hook**:每个 commercial app 装 git hook · 改源码后台跑 4 项 health(liveness / journey routes / build artifact / DB connectivity)· 不阻塞 commit
+- **LLM stochastic 边界**:`acceptable_p1_after_fixes` 字段仅适用 LLM 自由文本生成(塔罗解读 / insights)· 不适用 audit 抓的产品体验 bug(必须修源码)
+
+详见 [`atelier/agents/qa-real-device/README.md`](https://github.com/501EUniversity/atelier/tree/main/agents/qa-real-device#readme) · 新 app 8 步上线 · [`atelier/README.md`](https://github.com/501EUniversity/atelier#readme)。
 
 ---
 
-*Solo-ops · Built in Sonnet 4.6 · Shanghai.*
+*Solo-ops · Built in Sonnet 4.6 + Opus 4.7 · Shanghai.*
