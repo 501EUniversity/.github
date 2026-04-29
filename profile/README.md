@@ -44,7 +44,7 @@
 
 共享引擎 + per-app 契约驱动 · **8 audit + multi-persona LLM judge(per_route preflight + persona.setup_query)+ ai-output-quality + reviewer + auto-fixer + health-check 6 项 + verify-deploy** 全自动闭环。
 
-- **commercialize 四 hard gate**:Step E.5 RLS 必启 · F.5 contract reviewer 必过 · F.7 LLM judge 必 0 P0 · F.8 health-check 必 6/6 PASS
+- **commercialize 全自动 supervisor 闭环**(2026-04-30 升级):Step E.5 RLS 必启 · **Step F-AUTO 调 supervisor 11-stage**(替代旧 F.5/F.7/F.8 三个 hard gate)· 失败时 supervisor 自己 spawn fixer 改源码 + push + verify-deploy · loop 5 轮 · 真 stuck(同 finding ≥ 3 次)才 escalate-to-product.md + wechat 推 Eric · **0 人工介入** · 跟 6h cron 同一引擎
 - **health-check 6 项**:railway-deploy(deployment list 必 SUCCESS) · supabase-rls(public schema 必全启) · liveness · critical-routes · build-artifact · db-connectivity
 - **verify-deploy 工程保险**:`atelier/agents/qa-real-device/verify-deploy.mjs` · push 后必跑 · railway deployment list 最新条 SUCCESS + curl base_url 200/302 · 否则 exit 2 — 防"git push ≠ deploy success"红线
 - **Auto-fixer 退出条件**:同 finding 修过 ≥ 3 次 → 升级到产品层(`escalate-to-product.md` + 自动微信推 Eric)· 计数源 Notion findings DB hash · git log fallback
