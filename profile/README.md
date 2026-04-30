@@ -49,7 +49,10 @@
 - **verify-deploy 工程保险**:`atelier/agents/qa-real-device/verify-deploy.mjs` · push 后必跑 · railway deployment list 最新条 SUCCESS + curl base_url 200/302 · 否则 exit 2 — 防"git push ≠ deploy success"红线
 - **Auto-fixer 退出条件**:同 finding 修过 ≥ 3 次 → 升级到产品层(`escalate-to-product.md` + 自动微信推 Eric)· 计数源 Notion findings DB hash · git log fallback
 - **--until-clean**:auto-fix.mjs 真多轮 audit→fix→re-audit 循环 · 5 轮硬上限防 LLM 抽风
-- **6h cron**:macbook launchd(com.501e.atelier.qa-llm-judge)· lingxi + fit-pocket 持续监控
+- **6h cron**:⏸ 暂停(2026-04-30 · 没真用户不烧 LLM)· 重启 `node atelier/scripts/install-macbook-cron.mjs`
+- **跨 app contract pattern library**(2026-04-30 立):`atelier/contracts/501e-common.contract.json` 抽公共红线(PWA / i18n / a11y / 量表方向 / LLM 输出约束 / forbid AI tone)· per-app contract 继承 common · 改 common 一改全 commercial app 生效 · 第一次跑就抓出 fit-pocket P0 i18n messages 缺失
+- **supervisor escalate 治本三选一**(2026-04-30 立):同 finding 修 ≥3 次升级 · architect agent 必须 explicit 选 A 改 schema / B 改交互 / C feature flag / D 归档 · 不许"换大模型再试"假治本 · stage 10b 逐条验 verify_criteria · stage 11 reflect 检测产品 bug 标 acceptable_p1 红线
+- **Supabase service_role 月度轮换提醒**(2026-04-30 立):launchd 每月 1 号 9am 自动跑 · 25 天后推 wechat 提醒 · 防 leak 全暴露
 - **post-commit health hook**:每个 commercial app 装 git hook · 改源码后台跑 6 项 health · 不阻塞 commit
 - **LLM stochastic 边界(scope 严格)**:`acceptable_p1_after_fixes` 字段**仅适用** LLM 自由文本生成(塔罗解读 / insights / 长文 over-promise·persona-drift·boilerplate)· **不适用** audit 抓的产品体验 bug(a11y / 量表反向 / badge 缺失等必须修源码)
 
