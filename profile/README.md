@@ -53,8 +53,8 @@
 - **跨 app contract pattern library**(2026-04-30 立):`atelier/contracts/501e-common.contract.json` 抽公共红线(PWA / i18n / a11y / 量表方向 / LLM 输出约束 / forbid AI tone)· per-app contract 继承 common · 改 common 一改全 commercial app 生效 · 第一次跑就抓出 fit-pocket P0 i18n messages 缺失
 - **supervisor escalate 治本三选一**(2026-04-30 立):同 finding 修 ≥3 次升级 · architect agent 必须 explicit 选 A 改 schema / B 改交互 / C feature flag / D 归档 · 不许"换大模型再试"假治本 · stage 10b 逐条验 verify_criteria · stage 11 reflect 检测产品 bug 标 acceptable_p1 红线
 - **Supabase service_role 月度轮换提醒**(2026-04-30 立):launchd 每月 1 号 9am 自动跑 · 25 天后推 wechat 提醒 · 防 leak 全暴露
-- **per-fixer git worktree 隔离**(2026-05-01 · OpenAI Symphony 启发):stage 5 fixer pool 并发 fixer 各跑独立 worktree · 串行 mutex merge 回 main · ff→cherry-pick→冲突 explicit reject(不允许 silent skip)· 解决并发 fixer 撞 `.git/index.lock` + 文件覆盖
 - **per-app QA-WORKFLOW.md**(2026-05-01 · OpenAI Symphony 启发):每个 commercial app 根目录有 `QA-WORKFLOW.md`(YAML front matter + Markdown body)· extends `atelier/contracts/501e-common.qa-workflow.md` · supervisor + commercialize 都读 · 替代 hardcoded 常量(向后兼容 fallback)· 跟 contract 双轨(contract=什么违规 · workflow=怎么跑)
+- ~~per-fixer git worktree 隔离~~(2026-05-01 实施 · 同日**回滚**)· git worktree 不带 .gitignored 的 node_modules · fixer prompt 强制 `npm run build` · 整链断 · 教训:工程级隔离改动必须真跑 supervisor 一轮验 · `git revert 587340d` → `a51dc2c`
 - **post-commit health hook**:每个 commercial app 装 git hook · 改源码后台跑 6 项 health · 不阻塞 commit
 - **LLM stochastic 边界(scope 严格)**:`acceptable_p1_after_fixes` 字段**仅适用** LLM 自由文本生成(塔罗解读 / insights / 长文 over-promise·persona-drift·boilerplate)· **不适用** audit 抓的产品体验 bug(a11y / 量表反向 / badge 缺失等必须修源码)
 
