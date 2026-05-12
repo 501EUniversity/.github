@@ -26,7 +26,7 @@
 |---|---|---|
 | [`atelier`](https://github.com/501EUniversity/atelier) | ⭐ OS 主仓 | 商业化工作室 · 所有共享 agent / GTM / QA / data-analyst / 模板 |
 | [`lingxi-vespers`](https://github.com/501EUniversity/lingxi-vespers) | Product · MG-02 web | 灵犀 · 晚香 — 一本不做预言的玄学手札(塔罗 + 关系档案 + 日记)· Next.js + Capacitor 8 |
-| [`lingxi-vespers-ios`](https://github.com/501EUniversity/lingxi-vespers-ios) | Product · MG-02 native | 灵犀 · 晚香 SwiftUI native iOS 重写 · **build 6**(2026-05-12)17 bug fix + 4 tab + Welcome cover + SectionHero + in-app feedback · 真 UITabBar · 共用 prod backend |
+| [`lingxi-vespers-ios`](https://github.com/501EUniversity/lingxi-vespers-ios) | Product · MG-02 native | 灵犀 · 晚香 SwiftUI native iOS 重写 · **build 7**(2026-05-13)cumulative:17 bug + 4 tab/Welcome/feedback + WCAG AA + microcopy 25 finding 全清 + TF2 月夜册页 app icon · 真 UITabBar · 共用 prod backend |
 | [`fit-pocket`](https://github.com/501EUniversity/fit-pocket) | Product · MG-03 | 健身小本 — pocket-sized 训练计划 + 复盘 |
 | [`xhs-need-radar`](https://github.com/501EUniversity/xhs-need-radar) | Pipeline | 小红书需求雷达 · 双周扫痛点 → Opus 4.7 生成 Top 3 MVP → 部署 |
 | [`501e-engineering-skills`](https://github.com/501EUniversity/501e-engineering-skills) | Plugin · ⭐ 16 skill | 工程纪律 + 商业化 baseline · battle-tested · 含 `commercial-app-ui-baseline` 全套 SwiftUI+backend 模板 |
@@ -116,6 +116,46 @@
 - **build 6**(2026-05-12)· 加 Eric 真用户反馈 3 件:① 首页改首次弹窗(home tab → fullScreenCover) ② 4 tab(原 5)③ SectionHero 顶部一致 ④ in-app feedback 闭环
 - **codex review loop** · 每 build 跑 N 轮 · 到 P0==0 才放行 Archive(build 5 跑 8 轮 · build 6 跑 1 轮)
 - **真机 bug log** · `feedback_realdevice_bug_log_lingxi.md` 持续 append · 是 LLM judge / sim / static review 都看不到的护城河 layer
+
+---
+
+---
+
+## 🛡 Audit Workflow 升级(2026-05-13)· 加 WCAG + Microcopy 双 audit + Claude Design 接入
+
+`atelier` 加 2 个新 audit agent · 跟原有 LLM judge persona / contract reviewer 平行:
+
+| Agent | 抓什么 | 跟现有 audit 关系 |
+|---|---|---|
+| [`qa-design-a11y`](https://github.com/501EUniversity/atelier/tree/main/agents/qa-design-a11y) | WCAG 2.1 AA 13 准则 · 对比度真 score / 触控真尺寸 / Dynamic Type / VoiceOver narrative / focus 顺序 | 跟 axe-core 互补:axe 抓 30% 技术层 · 这个 agent 抓另 70% 结构层 |
+| [`qa-ux-copy`](https://github.com/501EUniversity/atelier/tree/main/agents/qa-ux-copy) | 5 原则(Clear/Concise/Consistent/Useful/Human)× 6 pattern · button label / error / empty state / CTA / onboarding | 跟 forbid_phrases(grep 黑名单)互补 · 黑名单挡暴露字样 · 这里正向审 copy 质量 |
+
+两个 agent 都 wire 进 `qa-supervisor stage 2 audit` · `commercialize Step F-AUTO` 调 supervisor 自然带上 · 不用手动跑。`commercialize master_checklist` 加 **F.3.5 / F.3.7** gate · 任一 P0 = ABORT。
+
+### 真验 · lingxi build 6 实跑 25 finding
+
+build 6 codex P0==0 通过后 · 用 atelier 这 2 audit 真扫一遍 · 抓出 **3 P0 + 13 P1 + 9 P2 = 25 项**:
+- **UX-Copy P0**:`common.unauth.applesignin` 文案暴露后端架构术语("apple-signin 端点接通后重试" → 用户语言)
+- **UX-Copy P0**:`ProfileView` signedOutHero 5 处 hardcode 中文(没 i18n · 英文用户看到中文)
+- **A11y P0**:`lingxiSeal #c4463a` on `lingxiPhoneBg #151627` 真对比度 3.6:1 < AA 4.5 · 影响所有 ≤11pt eyebrow / pressmark / tab selected label
+
+build 7 一次清干净:`lingxiSealBright #e36b5b`(~5.5:1)替换所有小字 caps · 25 finding 全修。codex round 1 抓出我漏的 13 处残留 · sed 批量扫一遍。
+
+→ **3 层平行**:codex 代码层 review + LLM judge persona 体验扫 + atelier audit 设计师级别 a11y/microcopy。互不可替代。
+
+## 🎨 Claude Design 接入流程(2026-05-13)· lingxi-vespers app icon TF2
+
+用户 → [`claude.ai/design`](https://claude.ai/design) → 5 方向 × 3 mockup + 6 TF deep dive(15 + 6 草稿)→ 选 **TF2 月夜册页 Moon Scroll**(原 TF2 是 yods/双柱 Kabbalah 符号 · Eric 嫌"宗教感太强" · Design 改成中式月夜挂轴 + 右下落款印『灵』字)→ Claude Code 接 handoff bundle(gzip tarball · 含 README + chat transcript + JSX 源 + HTML 渲染)→ 翻 JSX → SVG → `rsvg-convert -b #151627` → 1024×1024 RGB no alpha PNG → 替换 `AppIcon.appiconset/AppIcon.png` + 矢量源同存 `AppIcon.source.svg`(改色/size 直接复刷)。
+
+→ 设计 / 工程 双向闭环:Claude Design 出方案 · Claude Code 真落地。
+
+## 📱 Native Client Pipeline · lingxi-vespers-ios build 7 cumulative(2026-05-13 替换 build 6 段)
+
+- **build 1-5** · 17 bug 全 fix(Apple Sign in / onboarding / history / migration / 跨租户 / race · 真机+codex 8 轮 loop 抓)
+- **build 6** · 4 tab + Welcome cover + SectionHero + in-app feedback 闭环(Eric 真用户反馈 3 件)
+- **build 7** · WCAG AA + microcopy 双 audit 25 finding 全清 + Claude Design TF2 月夜册页 app icon · codex r1 抓残留 P0 后 sweep · r2 验
+- **codex review loop** · build 5 跑 8 轮 / build 6 跑 1 轮 / build 7 跑 2 轮 · 到 P0==0 才放 Archive
+- **真机 bug log** · `feedback_realdevice_bug_log_lingxi.md` Gap 18-22 累积 · 护城河 layer
 
 ---
 
