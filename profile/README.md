@@ -159,4 +159,34 @@ build 7 一次清干净:`lingxiSealBright #e36b5b`(~5.5:1)替换所有小字 cap
 
 ---
 
+---
+
+## 🛡 Findings Taxonomy · 8 大类护城河(2026-05-13)
+
+Build 5 → build 7 累计 52 项问题(17 build 5 bug + 25 audit finding + 27 codex P0)按 pattern 分类成 **8 大类** · 每类 build 阶段防御 + 测试阶段检测 + 真出处 · 任何新 commercial app commercialize 前 cross-check。
+
+| 类 | 频次 | build 阶段防御 | 测试阶段检测 |
+|---|---|---|---|
+| 1 · WCAG 文字对比度 | 30+(60%)| Brand/Colors.swift policy + lint-findings-taxonomy.mjs grep | F.3.5 qa-design-a11y · LLM 真算 luminance |
+| 2 · UX microcopy | 15+ | microcopy_style_guide + forbid_phrases 扩展 | F.3.7 qa-ux-copy · 5 原则 × 6 pattern |
+| 3 · Client↔Backend contract | 8 | preflight 字段 grep cross-check · body.userId = 红线 | F.5 qa-contract-reviewer · 8 维度反审 |
+| 4 · Server-authoritative state | 4 | DB atomic INSERT ON CONFLICT · pending sync 三件套 | supervisor stage 4/5 + race test prod DB N=20 |
+| 5 · Migration / schema | 3 | 真连 prod DB Node+pg 扫 | F.8 health-check + shadow schema test |
+| 6 · iOS native client | 7 | Brand modifier relativeTo · nav title inline | F.4 native UI baseline + preflight 8 项 |
+| 7 · Tab / page 架构 | 3 | tab ≤ 4 + SectionHero 复用 + Feedback wired | F.4 gate + commercial-app-ui-baseline plugin skill |
+| 8 · Workflow process 偷懒 | meta | Karpathy 4 + 工程纪律 | codex multi-round + supervisor stage 11 reflect |
+
+5 处工程化落实:
+- **Memory** · [`feedback_findings_taxonomy_master.md`](https://github.com/501EUniversity)(local memory)· 8 大类 master index
+- **Atelier** · [`scripts/lint-findings-taxonomy.mjs`](https://github.com/501EUniversity/atelier/tree/main/scripts/lint-findings-taxonomy.mjs) 快 grep + pre-commit hook · 跟 LLM audit 互补
+- **iOS** · `Brand/Colors.swift` 加 WCAG AA policy 注释 · 写代码就看见 lingxiSeal vs Bright vs Deep 用哪
+- **Supervisor** · `agents/qa-supervisor/prompts/reflector.md` A.5 · 自动标 finding `taxonomy_class` · 同类 ≥ 3 次升级工程保险
+- **Commercialize** · master_checklist Step 0.5 · 强制 lint 跑过 0 P0 才进 Step A
+
+Class 1 (WCAG) 占 60% · 自动化 ROI 最高。lint + audit 之后下个 app 几小时 ship 干净 · 不用 7 轮 codex 来回拉锯。
+
+详细:[Notion · Findings Taxonomy 8 大类护城河](https://www.notion.so/Findings-Taxonomy-8-Classes-Moat-2026-05-13-35e38b3189e181b59b6bfb29c6df6531)
+
+---
+
 *Solo-ops · Built in Sonnet 4.6 + Opus 4.7 · Shanghai.*
