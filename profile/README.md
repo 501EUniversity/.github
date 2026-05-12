@@ -26,9 +26,10 @@
 |---|---|---|
 | [`atelier`](https://github.com/501EUniversity/atelier) | ⭐ OS 主仓 | 商业化工作室 · 所有共享 agent / GTM / QA / data-analyst / 模板 |
 | [`lingxi-vespers`](https://github.com/501EUniversity/lingxi-vespers) | Product · MG-02 web | 灵犀 · 晚香 — 一本不做预言的玄学手札(塔罗 + 关系档案 + 日记)· Next.js + Capacitor 8 |
-| [`lingxi-vespers-ios`](https://github.com/501EUniversity/lingxi-vespers-ios) | Product · MG-02 native | 灵犀 · 晚香 SwiftUI native iOS 重写 · 真 UITabBar / 翻牌 3D / RWS 78 牌 + lingxi 滤镜 / 共用 prod backend |
+| [`lingxi-vespers-ios`](https://github.com/501EUniversity/lingxi-vespers-ios) | Product · MG-02 native | 灵犀 · 晚香 SwiftUI native iOS 重写 · **build 6**(2026-05-12)17 bug fix + 4 tab + Welcome cover + SectionHero + in-app feedback · 真 UITabBar · 共用 prod backend |
 | [`fit-pocket`](https://github.com/501EUniversity/fit-pocket) | Product · MG-03 | 健身小本 — pocket-sized 训练计划 + 复盘 |
 | [`xhs-need-radar`](https://github.com/501EUniversity/xhs-need-radar) | Pipeline | 小红书需求雷达 · 双周扫痛点 → Opus 4.7 生成 Top 3 MVP → 部署 |
+| [`501e-engineering-skills`](https://github.com/501EUniversity/501e-engineering-skills) | Plugin · ⭐ 16 skill | 工程纪律 + 商业化 baseline · battle-tested · 含 `commercial-app-ui-baseline` 全套 SwiftUI+backend 模板 |
 | [`reddit-radar`](https://github.com/501EUniversity/reddit-radar) | Pipeline · WIP | Reddit 获客侦察 · 服务 Reddit + AEO/SEO/GEO 主战线 |
 
 ## 商业化双轨
@@ -75,6 +76,46 @@
 2. **git push ≠ Railway deploy success**(railway up 本地传模式)· `feedback_railway_up_not_git_autopull.md` 立 · 工程保险 `verify-deploy.mjs`(railway deployment list 必 SUCCESS) + `health-check.mjs` 加 `railway-deploy` + `supabase-rls` 双闸
 
 详见 [`atelier/agents/qa-real-device/README.md`](https://github.com/501EUniversity/atelier/tree/main/agents/qa-real-device#readme) · 新 app 8 步上线 · [`atelier/README.md`](https://github.com/501EUniversity/atelier#readme)。
+
+---
+
+---
+
+## 📋 Commercialize Workflow · 全景图(2026-05-12 build 6 后)
+
+从 idea 到上架 + 5 类判断累积 · 一条线 7 阶段:
+
+```
+阶段 0  需求雷达 → 阶段 1  MVP 自动生成 → 阶段 2  验证 → 阶段 3  COMMERCIALIZE (A-I 9 步 · 5 hard gate)
+                                                                  ↓
+阶段 4  Native client iOS(可选)→ 阶段 5  TestFlight 真用户期 0(in-app 反馈闭环 ★build 6)
+                                                                  ↓
+                              阶段 6  上架 + 6 维度大改 → 阶段 7  5 类判断累积 · 飞轮
+```
+
+5 个 hard gate(任一不过 ABORT 上线):
+- **E.5** Supabase RLS 全启 · fit-pocket 真踩
+- **F.4** ★build 6 · Native client UI baseline(tab≤4 / WelcomeView cover / SectionHero / Feedback wired)· lingxi build 5 真用户后立
+- **F.5** Contract reviewer LLM 反审 8 维度
+- **F.7** multi-persona LLM judge P0=0
+- **F.8** Health check 6 项 PASS
+
+详细全景图 + 人话解释 + 5 类判断:[Notion · 501E Commercialize Workflow](https://www.notion.so/501E-Commercialize-Workflow-2026-05-12-build-6-35e38b3189e181c9b1aadf7b5054d9a3)。
+
+## 📦 Engineering Skills Plugin · 16 skill
+
+抽自 60+ memory · battle-tested 跨 commercial app pipeline · [`501e-engineering-skills`](https://github.com/501EUniversity/501e-engineering-skills) PRIVATE alpha。
+
+最新加(2026-05-12):**`commercial-app-ui-baseline`** — 每个 commercial app 必备的 3 件 baseline(底部 tab ≤ 4 + 共享 SectionHero + in-app feedback 闭环)· 含 9 个 copy-paste 模板(SwiftUI + backend Prisma/route + 本地 poll script)· 下次 app 直接抄。
+
+详见 plugin README + `feedback_commercial_app_lessons_lingxi_17.md`(6 layer / 19 类 rules · 每条链回 lingxi 真出处)。
+
+## 📱 Native Client Pipeline · lingxi-vespers-ios build 6 cumulative
+
+- **build 1-5** · 17 bug 全 fix(Apple Sign in 字段 mismatch / onboarding 不 trigger / i18n raw key / mood 乱码 / 注销重登又弹 / history 永远空 / migration drift / race / 跨租户 · 全在真机+codex 8 轮 review loop 抓的)
+- **build 6**(2026-05-12)· 加 Eric 真用户反馈 3 件:① 首页改首次弹窗(home tab → fullScreenCover) ② 4 tab(原 5)③ SectionHero 顶部一致 ④ in-app feedback 闭环
+- **codex review loop** · 每 build 跑 N 轮 · 到 P0==0 才放行 Archive(build 5 跑 8 轮 · build 6 跑 1 轮)
+- **真机 bug log** · `feedback_realdevice_bug_log_lingxi.md` 持续 append · 是 LLM judge / sim / static review 都看不到的护城河 layer
 
 ---
 
