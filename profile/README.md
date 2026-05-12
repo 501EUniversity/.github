@@ -26,7 +26,7 @@
 |---|---|---|
 | [`atelier`](https://github.com/501EUniversity/atelier) | ⭐ OS 主仓 | 商业化工作室 · 所有共享 agent / GTM / QA / data-analyst / 模板 |
 | [`lingxi-vespers`](https://github.com/501EUniversity/lingxi-vespers) | Product · MG-02 web | 灵犀 · 晚香 — 一本不做预言的玄学手札(塔罗 + 关系档案 + 日记)· Next.js + Capacitor 8 |
-| [`lingxi-vespers-ios`](https://github.com/501EUniversity/lingxi-vespers-ios) | Product · MG-02 native | 灵犀 · 晚香 SwiftUI native iOS 重写 · **build 7**(2026-05-13)cumulative:17 bug + 4 tab/Welcome/feedback + WCAG AA + microcopy 25 finding 全清 + TF2 月夜册页 app icon · 真 UITabBar · 共用 prod backend |
+| [`lingxi-vespers-ios`](https://github.com/501EUniversity/lingxi-vespers-ios) | Product · MG-02 native | 灵犀 · 晚香 SwiftUI native iOS 重写 · **build 8**(2026-05-13)cumulative 67+ 项:17 bug + 4 tab/Welcome/feedback + WCAG AA + microcopy + 15 i18n hardcoded 中文 全清 + TF2 月夜册页 icon + 4-layer build prevention(pre-commit / CI / commercialize / fixer prompt)|
 | [`fit-pocket`](https://github.com/501EUniversity/fit-pocket) | Product · MG-03 | 健身小本 — pocket-sized 训练计划 + 复盘 |
 | [`xhs-need-radar`](https://github.com/501EUniversity/xhs-need-radar) | Pipeline | 小红书需求雷达 · 双周扫痛点 → Opus 4.7 生成 Top 3 MVP → 部署 |
 | [`501e-engineering-skills`](https://github.com/501EUniversity/501e-engineering-skills) | Plugin · ⭐ 16 skill | 工程纪律 + 商业化 baseline · battle-tested · 含 `commercial-app-ui-baseline` 全套 SwiftUI+backend 模板 |
@@ -186,6 +186,27 @@ Build 5 → build 7 累计 52 项问题(17 build 5 bug + 25 audit finding + 27 c
 Class 1 (WCAG) 占 60% · 自动化 ROI 最高。lint + audit 之后下个 app 几小时 ship 干净 · 不用 7 轮 codex 来回拉锯。
 
 详细:[Notion · Findings Taxonomy 8 大类护城河](https://www.notion.so/Findings-Taxonomy-8-Classes-Moat-2026-05-13-35e38b3189e181b59b6bfb29c6df6531)
+
+---
+
+---
+
+## ⚡ Build-Time Prevention · 4 Layers(2026-05-13 · Eric "build 阶段就避免" 工程化)
+
+Lingxi build 7→8 真发现:即使 codex 7 轮 + qa-design-a11y + qa-ux-copy audit + 手修 · 仍有 **15 项 hardcoded 中文 i18n violation** 漏过 · 直到 atelier `lint-findings-taxonomy.mjs`(Python CJK 检测修好后)真 grep 才抓出。
+
+→ Eric 指令:**以后任何 app 必须在 build 阶段就避免 · 不靠后置 audit 抓**。装 4 层 hook · 越早拦越好。
+
+| Layer | 工具 | 拦截时机 |
+|---|---|---|
+| 1 · Pre-commit hook | `atelier/scripts/install-pre-commit-lint.mjs` 装 `.git/hooks/pre-commit` | 本地 `git commit` 前 · 秒级 |
+| 2 · CI / PR check | `atelier/templates/lint-findings-taxonomy.yml` | GitHub PR / push · 秒级 |
+| 3 · Commercialize Step 0.5 | `atelier/bin/commercialize.mjs` 真 spawn lint | commercialize 进 Step A 之前 |
+| 4 · Fixer agent prompt | `atelier/agents/qa-supervisor/prompts/fixer-app-src.md` i18n strict 红线 | qa-supervisor stage 5 写源码时 |
+
+→ 以后写 `Text("中文")` · 在 4 个 layer 任意一个被拦 · 不可能 ship 到 build 8 这种状况。
+
+详细:[Notion · Build 8 + Build-Time Prevention 4 Layers](https://www.notion.so/Build-8-Build-Time-Prevention-4-Layers-2026-05-13-35e38b3189e18166a008cf95d906b2e3)
 
 ---
 
