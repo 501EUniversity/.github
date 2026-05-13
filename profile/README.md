@@ -169,11 +169,13 @@ build 7 一次清干净:`lingxiSealBright #e36b5b`(~5.5:1)替换所有小字 cap
 
 Build 5 → build 12 累计 89+ 项 P0(17 build 5 bug + 25 audit finding + 9 build 11 i18n + 14 build 12 + codex 5 轮 r1-r5 ≈ 30+ + 5 atelier infra)按 pattern 分类成 **8 大类(待扩 11 类)** · 每类 build 阶段防御 + 测试阶段检测 + 真出处 · 任何新 commercial app commercialize 前 cross-check。
 
-**待扩 3 类**(codex r5 暴露 SoT 漏 · 在 fit-pocket 启动前补):
+**已扩 3 类**(2026-05-13 晚 codex r5 暴露 → atelier `lint-findings-taxonomy.mjs` 8→11 类工具化):
 
-- 类 9 · **Auth boundary takeover**(JWT verification gap / body-controlled user lookup / session hijack)· 真出处 lingxi apple-signin body.email lookup 漏洞
-- 类 10 · **URL injection / XSS / open redirect**(query 参数直接进 router.replace 或 window.location)· 真出处 lingxi OnboardingForm / signin returnTo
-- 类 11 · **Build gate failure**(lint error / TS error / 失败 CI 当 ship 拦)· 真出处 react-hooks/set-state-in-effect 3 errors
+- 类 9 · **Auth boundary takeover**(JWT verification gap / body-controlled user lookup / session hijack)· 真出处 lingxi apple-signin body.email lookup 漏洞 · lint pattern:`/api/auth/*` + `body.email/userId` + user lookup + 无 sanitize · allow-list E2E gated routes · **retro 验** pre-r5-fix 真抓 1 P0 ✅
+- 类 10 · **URL injection / XSS / open redirect**(query 参数直接进 router.replace 或 window.location)· 真出处 lingxi OnboardingForm / signin returnTo · lint 单文件 50% · prop 链流转 audit agent 兜底(follow-up)
+- 类 11 · **Build gate failure**(lint error / TS error / 失败 CI 当 ship 拦)· 真出处 react-hooks/set-state-in-effect 3 errors · lint 直接跑 `npm run lint` + `npx tsc --noEmit` exit code · **retro 验** pre-r5-fix 真抓 ✅
+
+**真出处**:`atelier@088be77` 工具化 commit · retro test on `lingxi-vespers@7b023f5~1` 抓 2 P0(类 9 + 类 11)· 证明 lint 11 类工具化方向对 · 部分类(类 10 prop 链)需 audit agent 兜底。
 
 | 类 | 频次 | build 阶段防御 | 测试阶段检测 |
 |---|---|---|---|
