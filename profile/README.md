@@ -27,7 +27,8 @@
 | [`atelier`](https://github.com/501EUniversity/atelier) | ⭐ OS 主仓 | 商业化工作室 · 所有共享 agent / GTM / QA / data-analyst / 模板 |
 | [`lingxi-vespers`](https://github.com/501EUniversity/lingxi-vespers) | Product · MG-02 web | 灵犀 · 晚香 — 一本不做预言的玄学手札(塔罗 + 关系档案 + 日记)· Next.js + Capacitor 8 |
 | [`lingxi-vespers-ios`](https://github.com/501EUniversity/lingxi-vespers-ios) | Product · MG-02 native | 灵犀 · 晚香 SwiftUI native iOS 重写 · **build 12**(2026-05-13 晚)cumulative 89+ 项 P0:17 bug + 4 tab/Welcome/feedback + WCAG AA + microcopy + 24 i18n + 9 (build 11) i18n catch-all + 14 (build 12) contract/silent/server-auth/auth-takeover/XSS/build-gate · codex 5 轮 review loop 抓 5 大层 P0 · 立 8 新 red lines + Dynamic Type wave follow-up · SoT 8 类应扩 11 类(加 auth boundary / URL injection / build gate) |
-| [`fit-pocket`](https://github.com/501EUniversity/fit-pocket) | Product · MG-03 | 健身小本 — pocket-sized 训练计划 + 复盘 |
+| [`fit-pocket`](https://github.com/501EUniversity/fit-pocket) | Product · MG-03 web | 健身小本 — pocket-sized 训练计划 + 复盘 · backend Next.js + Apple Sign in/refresh routes(2026-05-13 加 · inherit lingxi r5 takeover 防御)|
+| [`fit-pocket-ios`](https://github.com/501EUniversity/fit-pocket-ios) | Product · MG-03 native | 健身小本 SwiftUI native iOS · **build 2-r3**(2026-05-13 晚)Archive-ready · 4 tab + Apple Sign in + Welcome + Feedback + Profile · pocketSeal 暖橙占位 · **第 2 案例验 SoT 11 类工具化**:lint 11 类 0 P0 + codex 3 轮收敛(对比 lingxi build 12 用 5 轮)|
 | [`xhs-need-radar`](https://github.com/501EUniversity/xhs-need-radar) | Pipeline | 小红书需求雷达 · 双周扫痛点 → Opus 4.7 生成 Top 3 MVP → 部署 |
 | [`501e-engineering-skills`](https://github.com/501EUniversity/501e-engineering-skills) | Plugin · ⭐ 16 skill | 工程纪律 + 商业化 baseline · battle-tested · 含 `commercial-app-ui-baseline` 全套 SwiftUI+backend 模板 |
 | [`reddit-radar`](https://github.com/501EUniversity/reddit-radar) | Pipeline · WIP | Reddit 获客侦察 · 服务 Reddit + AEO/SEO/GEO 主战线 |
