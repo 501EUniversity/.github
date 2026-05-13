@@ -26,7 +26,7 @@
 |---|---|---|
 | [`atelier`](https://github.com/501EUniversity/atelier) | ⭐ OS 主仓 | 商业化工作室 · 所有共享 agent / GTM / QA / data-analyst / 模板 |
 | [`lingxi-vespers`](https://github.com/501EUniversity/lingxi-vespers) | Product · MG-02 web | 灵犀 · 晚香 — 一本不做预言的玄学手札(塔罗 + 关系档案 + 日记)· Next.js + Capacitor 8 |
-| [`lingxi-vespers-ios`](https://github.com/501EUniversity/lingxi-vespers-ios) | Product · MG-02 native | 灵犀 · 晚香 SwiftUI native iOS 重写 · **build 8**(2026-05-13)cumulative 67+ 项:17 bug + 4 tab/Welcome/feedback + WCAG AA + microcopy + 15 i18n hardcoded 中文 全清 + TF2 月夜册页 icon + 4-layer build prevention(pre-commit / CI / commercialize / fixer prompt)|
+| [`lingxi-vespers-ios`](https://github.com/501EUniversity/lingxi-vespers-ios) | Product · MG-02 native | 灵犀 · 晚香 SwiftUI native iOS 重写 · **build 12**(2026-05-13 晚)cumulative 89+ 项 P0:17 bug + 4 tab/Welcome/feedback + WCAG AA + microcopy + 24 i18n + 9 (build 11) i18n catch-all + 14 (build 12) contract/silent/server-auth/auth-takeover/XSS/build-gate · codex 5 轮 review loop 抓 5 大层 P0 · 立 8 新 red lines + Dynamic Type wave follow-up · SoT 8 类应扩 11 类(加 auth boundary / URL injection / build gate) |
 | [`fit-pocket`](https://github.com/501EUniversity/fit-pocket) | Product · MG-03 | 健身小本 — pocket-sized 训练计划 + 复盘 |
 | [`xhs-need-radar`](https://github.com/501EUniversity/xhs-need-radar) | Pipeline | 小红书需求雷达 · 双周扫痛点 → Opus 4.7 生成 Top 3 MVP → 部署 |
 | [`501e-engineering-skills`](https://github.com/501EUniversity/501e-engineering-skills) | Plugin · ⭐ 16 skill | 工程纪律 + 商业化 baseline · battle-tested · 含 `commercial-app-ui-baseline` 全套 SwiftUI+backend 模板 |
@@ -149,21 +149,31 @@ build 7 一次清干净:`lingxiSealBright #e36b5b`(~5.5:1)替换所有小字 cap
 
 → 设计 / 工程 双向闭环:Claude Design 出方案 · Claude Code 真落地。
 
-## 📱 Native Client Pipeline · lingxi-vespers-ios build 7 cumulative(2026-05-13 替换 build 6 段)
+## 📱 Native Client Pipeline · lingxi-vespers-ios build 12 cumulative(2026-05-13 晚 替换 build 7 段)
 
 - **build 1-5** · 17 bug 全 fix(Apple Sign in / onboarding / history / migration / 跨租户 / race · 真机+codex 8 轮 loop 抓)
 - **build 6** · 4 tab + Welcome cover + SectionHero + in-app feedback 闭环(Eric 真用户反馈 3 件)
-- **build 7** · WCAG AA + microcopy 双 audit 25 finding 全清 + Claude Design TF2 月夜册页 app icon · codex r1 抓残留 P0 后 sweep · r2 验
-- **codex review loop** · build 5 跑 8 轮 / build 6 跑 1 轮 / build 7 跑 2 轮 · 到 P0==0 才放 Archive
-- **真机 bug log** · `feedback_realdevice_bug_log_lingxi.md` Gap 18-22 累积 · 护城河 layer
+- **build 7** · WCAG AA + microcopy 双 audit 25 finding 全清 + Claude Design TF2 月夜册页 app icon
+- **build 8-10** · lint Python escape silent fail retro 抓 47 i18n hardcoded + multi-round codex 抓残留 P0(ternary / lastError / multi-line) · 立 `feedback_audit_infra_self_verify` 红线
+- **build 11**(commit cbc6ca4)· lint r6→r7 catch-all + multi-line array allow-list · 9 项 i18n caller(typeOptions zh tuple → en-slug canonical + legacy zh map 兼容)
+- **build 12**(commit e9a5f70 + backend 3 + atelier 2)· 14 项真 P0:DELETE journal contract + profileCompletedAt rollback + 3 个 silent catch + auth refresh route + delete dead ensure + **Apple Sign in auth takeover 真修** + safeReturnTo XSS 4 处 + 3 react-hooks lint gate + atelier infra(supervisor guard / audit unavailable inject / multi-platform merge / top-N cap 去 / grep silent 真分)
+- **codex review loop** · build 5 跑 8 轮 / build 6 跑 1 轮 / build 7 跑 2 轮 / build 11 跑 3 轮 / **build 12 跑 5 轮**(r1-r5 抓不同层 P0 · 5 大层覆盖)· 到 P0==0 才放 Archive
+- **真机 bug log** · `feedback_realdevice_bug_log_lingxi.md` Gap 18-23 累积 · 护城河 layer
+- **follow-up wave** · `project_dynamic_type_wave.md` · 82 sites `.font(.system(size:))` 无 relativeTo · 触发 fit-pocket 真起来抽 typography helper(7-12h · 字体策略 A 语义字体 vs B 自定义 Instrument Serif)
 
 ---
 
 ---
 
-## 🛡 Findings Taxonomy · 8 大类护城河(2026-05-13)
+## 🛡 Findings Taxonomy · 8 大类护城河 · 应扩 11 类(2026-05-13 晚 codex r5 暴露)
 
-Build 5 → build 7 累计 52 项问题(17 build 5 bug + 25 audit finding + 27 codex P0)按 pattern 分类成 **8 大类** · 每类 build 阶段防御 + 测试阶段检测 + 真出处 · 任何新 commercial app commercialize 前 cross-check。
+Build 5 → build 12 累计 89+ 项 P0(17 build 5 bug + 25 audit finding + 9 build 11 i18n + 14 build 12 + codex 5 轮 r1-r5 ≈ 30+ + 5 atelier infra)按 pattern 分类成 **8 大类(待扩 11 类)** · 每类 build 阶段防御 + 测试阶段检测 + 真出处 · 任何新 commercial app commercialize 前 cross-check。
+
+**待扩 3 类**(codex r5 暴露 SoT 漏 · 在 fit-pocket 启动前补):
+
+- 类 9 · **Auth boundary takeover**(JWT verification gap / body-controlled user lookup / session hijack)· 真出处 lingxi apple-signin body.email lookup 漏洞
+- 类 10 · **URL injection / XSS / open redirect**(query 参数直接进 router.replace 或 window.location)· 真出处 lingxi OnboardingForm / signin returnTo
+- 类 11 · **Build gate failure**(lint error / TS error / 失败 CI 当 ship 拦)· 真出处 react-hooks/set-state-in-effect 3 errors
 
 | 类 | 频次 | build 阶段防御 | 测试阶段检测 |
 |---|---|---|---|
