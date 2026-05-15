@@ -42,6 +42,23 @@
 
 ---
 
+## 📌 当前主方向(2026-05-15 更新)
+
+接 Cowork 出的商业分析 + 竞品深度调研 · 3 条战略决定:
+
+1. **Phase 3 SaaS 是 north-star · 2 app 是 case + 弹药**:灵犀 + Fit Pocket 不是业务本身 · 是 Phase 3 SaaS($299/月给 solo founder · 第 13 月+ 起跑)推介的方法论证明。对外叙事调整为"用 Lovable/Replit/Cursor 的服务" · 不是又一个 agentic builder。
+2. **🔴 5-LOI gate · 第 9 月前必过**:Phase 3 SaaS 在建之前 · 5 个 design-partner 面访 + 收 $299/月付费 LOI · 3+ 进 / <3 改价/改受众/改 model · 不许"先建后改"。
+3. **90 天聚焦灵犀**(0-30 天)· Fit Pocket Archive 但暂停 GTM 推动 · 防稀释 Phase 1 证明 + 算法降权两个账号。
+
+威胁面已经清楚:
+- 工具竞品累计 $50亿+ 融资(Lovable / Cursor / Replit / Bolt / v0) · 工具对工具 = 自杀
+- **Anthropic 自家 "Claude for Small Business"** 已发(Cowork 内 15 agentic workflow · 含 Pro/Max plan) · $299/月被免费 toggle 挤压 · 必须以 done-for-you 服务侧竞争
+- Mintlify($10M ARR / $250-300/月 / 中端 B2B 技术 founder)是最接近 analog · 反向工程他们 GTM
+
+完整决策 log + 历史:[Notion · 501E 战略决策 Log](https://www.notion.so/501E-Log-34a38b3189e181edbfbefc4d0ff8835d) · [`atelier/docs/decision-log.md`](https://github.com/501EUniversity/atelier/blob/main/docs/decision-log.md)
+
+---
+
 ## QA 系统(2026-04-24 上线 · 2026-04-29 闭环升级 · 2026-04-29 晚 双红线纠正)
 
 共享引擎 + per-app 契约驱动 · **8 audit + multi-persona LLM judge(per_route preflight + persona.setup_query)+ ai-output-quality + reviewer + auto-fixer + health-check 6 项 + verify-deploy** 全自动闭环。
